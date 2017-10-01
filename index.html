@@ -1,0 +1,68 @@
+<html>
+
+<head>
+ <script src="https://webduino.io/components/webduino-js/dist/webduino-base.min.js"></script>
+ <!-- <script src="http://webduinoio.github.io/webduino-bluetooth-transport/src/CordovaBluetoothTransport.js"></script> -->
+   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script src="js/bluetoothCoreFunc.js"></script>
+</head>
+
+<body>
+
+  <div id="txt_status">Sensor status: stop</div>
+  <div id="txt_threshold">Current Threshold: 0</div>
+  <div id="txt_cnt">Current Threshold Cnt: 0</div>
+  <div id="txt_duration">Current  Duration: 0</div>
+  <form>
+   <input type="text" id="input_set_value">
+  </form>
+  <form>
+    <button type="button" id="btn_sensorstatus_switch">Sensor Status Switch</button>
+  </form>
+  <form>
+    <button type="button" id="btn_set_threshold">Set Threshold</button>
+    <button type="button" id="btn_get_threshold">Get Threshold</button>
+  </form>
+  <form>
+    <button type="button" id="btn_set_duration">Set Duration</button>
+    <button type="button" id="btn_get_duration">Get Duration</button>
+  </form>
+  <div id="chart_div"></div>
+
+ <script>
+ //================================================================================================================================
+  var txtStatus = document.getElementById("txt_status");
+  var txtCnt = document.getElementById("txt_cnt");
+  var txtThreshold = document.getElementById("txt_threshold");
+  var txtDuration = document.getElementById("txt_duration");
+  var inputSetValue = document.getElementById("input_set_value");
+  var btnSensorstatusSwitch = document.getElementById("btn_sensorstatus_switch");
+  var btnSetThreshold = document.getElementById("btn_set_threshold");
+  var btnGetThreshold = document.getElementById("btn_get_threshold");
+  var btnSetDuration = document.getElementById("btn_set_duration");
+  var btnGetDuration = document.getElementById("btn_get_duration");
+
+  //================================================== init
+
+  var board = new bluetoothConnect('98:D3:31:70:7A:22'); //connect
+  //drawChartTrigger
+  setInterval(drawBackgroundColor,50);
+  //================================================= btn event listen
+  //SensorStatus
+  btnSensorstatusSwitch.addEventListener("click", StatusSwitch());
+  //Threshold
+  btnGetThreshold.addEventListener("click", getThreshold());
+  btnSetThreshold.addEventListener("click",setThreshold());
+  //Duration
+  btnGetDuration.addEventListener("click", getDuration());
+  btnSetDuration.addEventListener("click", setDuration());
+
+  //================================================== get msg
+ 	board._transport.on('message', function (event) {
+    MsgAnalysis(event);
+ 	});
+//================================================================================================================================
+ </script>
+</body>
+
+</html>
